@@ -16,6 +16,7 @@
 - GANs
 
 2- Muaz TWATI:
+- Pixels deletion
 - Freeman code 
 
 3- Aboud ZAKARIA:
