@@ -15,7 +15,7 @@
 - Noise filter
 - GANs
 
-2- Muaz TWATTI:
+2- Muaz TWATI:
 - Freeman code 
 
 3- Aboud ZAKARIA:
