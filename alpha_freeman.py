@@ -10,6 +10,8 @@ from matplotlib import pylab as pt
 from mnist import MNIST
 from numpy import array, uint8
 import cv2
+import pickle
+
 
 vis = array( [False] * (28*28) )
 vis = vis.reshape([28, 28])
@@ -110,6 +112,11 @@ def my_freeman_calc(img):
 
     return img, chain    
 
+def check_point_inside(point):
+    x,y = point
+    return x >= 0 and x < 28 and y >= 0 and y < 28
+
+
 def freeman_calc(img):
 
     vis = array( [False] * (28*28) )
@@ -147,6 +154,8 @@ def freeman_calc(img):
     for direction in directions:
         idx = dir2idx[direction]
         new_point = (start_point[0]+change_i[idx], start_point[1]+change_j[idx])
+        if not check_point_inside(new_point):
+            continue
         if img[new_point] != 0: # if is ROI
             border.append(new_point)
             vis[new_point] = True
@@ -166,6 +175,8 @@ def freeman_calc(img):
         for direction in dirs:
             idx = dir2idx[direction]
             new_point = (curr_point[0]+change_i[idx], curr_point[1]+change_j[idx])
+            if not check_point_inside(new_point):
+                continue
             if img[new_point] != 0: # if is ROI
                 border.append(new_point)
                 vis[new_point] = True
@@ -184,28 +195,35 @@ def freeman_calc(img):
     return img, chain
 
 if __name__ == "__main__":
-    
-    read_all_data = False
+    itemlist = []
+    read_all_data = True
     if read_all_data:
-        mndata = MNIST('C:\\Users\\Muaz\\Desktop\\ML_Project\\data')
-        images, labels = mndata.load_training()
-        im_gray = array(images[0])
-        im_gray = im_gray.reshape([28, 28])
+        mndata = MNIST('C:\\Users\\Muaz\\Desktop\\MLDM project\\ML_Project\\data')
+        images, labels = mndata.load_testing()
+        print("read done")
+        
+        for i in range(len(images)):
+            #print (i)
+            im_gray = array(images[i])
+            im_gray = im_gray.reshape([28, 28])
+            im_gray = im_gray.astype(uint8)
+            (thresh, im_bw) = cv2.threshold(im_gray, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+            im_bw, code = freeman_calc(im_bw)
+            itemlist.append(code)
+            if i % 100 == 0:
+                print(i/100)
+            
     else:
-        im_gray = cv2.imread('C:\\Users\\Muaz\\Desktop\\ML_Project\\img.png',0)
+        im_gray = cv2.imread('C:\\Users\\Muaz\\Desktop\\MLDM project\\ML_Project\\img.png',0)
+        
+    
+    with open('test.data', 'wb') as fp1:
+        pickle.dump(itemlist, fp1)
+
+    with open('test_labels.data', 'wb') as fp2:
+        pickle.dump(labels, fp2)
 
     
-    im_gray = im_gray.astype(uint8)
-    #cv2.imwrite('C:\\Users\\Muaz\\Desktop\\ML_Project\\img.png',im_gray)
-
-    (thresh, im_bw) = cv2.threshold(im_gray, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
     
-    #print(labels[0])
-    print(im_bw)
-    pt.imshow(im_bw)
-    pt.show()
-    im_bw, code = freeman_calc(im_bw)
-    print(code)
-    pt.imshow(im_bw)
-    pt.show()
+   
     
