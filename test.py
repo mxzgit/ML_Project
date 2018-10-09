@@ -20,11 +20,15 @@ for i in range(m):
 y = pickle.load(open("train_labels.data", "rb"))
 y = np.array(y)
 
-XX = XX[:600, :]
-y = y[: 600]
+_XX = XX[:600, :]
+_y = y[: 600]
 
 knn = KNeighborsClassifier(n_neighbors=1,
                     algorithm='auto',
                     metric=dp_rolling_ed)
 
-knn.fit(XX, y)
+knn.fit(_XX, _y)
+
+pred = knn.predict(XX[601:700, :])
+acuracy = (pred == y[601:700]).mean() * 100
+print(f'acuracy = {int(acuracy)}%')
