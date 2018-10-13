@@ -30,6 +30,7 @@ def check_4_neighbors(x,y,image):
     return False
 
 def dfs(x,y,img):
+    global vis
     if vis[x,y] != 0 or img[x,y] == 255:
         return
     vis[x,y] = 1
@@ -123,10 +124,11 @@ def freeman_calc(img):
     vis = vis.reshape([28, 28])
 
     done = False
-    for i, row in enumerate(img):
-        for j, value in enumerate(row):
-            if value == 255:
+    for i in range(img.shape[0]):
+        for j in range(img.shape[1]):
+            if img[i,j] == 255:
                 start_point = (i, j)
+                img[i+1,j] = 255
                 #print(start_point, value)
                 done = True
                 break
@@ -135,19 +137,11 @@ def freeman_calc(img):
         if done:
             break
         
-    directions = [ 0,  1,  2,
-                7,      3,
-                6,  5,  4]
+    directions = [0, 1, 2, 3, 4, 5, 6, 7]
     dir2idx = dict(zip(directions, range(len(directions))))
-
-    change_j =   [-1,  0,  1, # x or columns
-                -1,      1,
-                -1,  0,  1]
-
-    change_i =   [-1, -1, -1, # y or rows
-                0,      0,
-                1,  1,  1]
-
+    change_j =  [ 0, 1, 1, 1, 0,-1,-1,-1 ]
+    change_i =  [-1,-1, 0,+1,+1,+1, 0,-1 ]
+ 
     border = []
     chain = []
     curr_point = start_point
@@ -194,35 +188,111 @@ def freeman_calc(img):
                 img[i,j] = 0
     return img, chain
 
+def dfs_count(img,x,y):
+    
+    if img[x,y] != 255 or vis[x,y]:
+        return
+    vis[x,y] = True
+
+    for z in range(8):
+        if x+dx8[z] >= 0 and x+dx8[z] < 28 and y+dy8[z] >= 0 and y+dy8[z] < 28:
+            dfs_count(img,x+dx8[z],y+dy8[z]) 
+
+def count_component(im_bw):
+    global vis
+    vis = array( [False] * (28*28) )
+    vis = vis.reshape([28, 28])
+    ret = 0
+    for i in range(28):
+        for j in range(28):
+            if im_bw[i,j] == 255 and not vis[i,j]:
+                ret += 1
+                dfs_count(im_bw,i,j)
+    return ret
+
+
+def BS_threshold(im_gray):
+
+    f = 1
+    l = 127
+    ret = 127
+    while f<l:
+        m = int((f+l)/2)
+        (_,im_bw) = cv2.threshold(im_gray, m, 255, cv2.THRESH_BINARY)
+        number_component = count_component(im_bw)
+        print(number_component,f,m,l)
+        if number_component == 0:
+            print("number_component == 0 is not false !!")
+            exit(2)
+        if number_component == 1:
+            f = m+1
+            ret = m
+            return cv2.threshold(im_gray, ret, 255, cv2.THRESH_BINARY)
+        else:
+            l = m
+    
+    print("BS did not find a solution!!")
+    pt.imshow(im_gray)
+    pt.show()
+    cv2.imwrite('C:\\Users\\Muaz\\Desktop\\MLDM project\\ML_Project\\badbad.png',im_gray)
+    exit(2)
+    return cv2.threshold(im_gray, ret, 255, cv2.THRESH_BINARY)
+    
 if __name__ == "__main__":
-    itemlist = []
-    read_all_data = True
-    if read_all_data:
-        mndata = MNIST('C:\\Users\\Muaz\\Desktop\\MLDM project\\ML_Project\\data')
-        images, labels = mndata.load_testing()
+
+    threshold = 100
+    mndata = MNIST('C:\\Users\\Muaz\\Desktop\\MLDM project\\ML_Project\\data')
+    for coco in range(2):
+        itemlist = []
+        if coco == 0:
+            images, labels = mndata.load_testing()
+        else:
+            images, labels = mndata.load_training()
         print("read done")
-        
-        for i in range(len(images)):
-            #print (i)
+        for i in range(694,len(images)):
+            
+            print (i)
             im_gray = array(images[i])
             im_gray = im_gray.reshape([28, 28])
             im_gray = im_gray.astype(uint8)
-            (thresh, im_bw) = cv2.threshold(im_gray, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-            im_bw, code = freeman_calc(im_bw)
+            
+           
+            #im_bw = cv2.adaptiveThreshold(im_gray, 255,cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY ,11,2) 
+            (thresh, im_bw) = cv2.threshold(im_gray, 127, 255, cv2.THRESH_BINARY)
+            if count_component(im_bw) > 1:
+                print("*****")
+                (thresh, im_bw) = BS_threshold(im_gray) 
+
+         
+            code_bw, code = freeman_calc(im_bw)
+         
+            
+            if len(code) < 20:
+                #print("coco")
+                #pt.imshow(code_bw)
+                #pt.show()
+                #pt.imshow(im_gray)
+                #pt.show()
+                print(thresh)
+                (thresh, im_bw) = cv2.threshold(im_gray, threshold, 255, cv2.THRESH_BINARY)
+                pt.imshow(im_bw)
+                pt.show()
+
             itemlist.append(code)
             if i % 100 == 0:
                 print(i/100)
-            
-    else:
-        im_gray = cv2.imread('C:\\Users\\Muaz\\Desktop\\MLDM project\\ML_Project\\img.png',0)
-        
+                
     
-    with open('test.data', 'wb') as fp1:
-        pickle.dump(itemlist, fp1)
-
-    with open('test_labels.data', 'wb') as fp2:
-        pickle.dump(labels, fp2)
-
+        if coco == 0:
+            with open('test.data', 'wb') as fp1:
+                pickle.dump(itemlist, fp1)
+            with open('test_labels.data', 'wb') as fp2:
+                pickle.dump(labels, fp2)
+        else:
+            with open('train.data', 'wb') as fp1:
+                pickle.dump(itemlist, fp1)
+            with open('train_labels.data', 'wb') as fp2:
+                pickle.dump(labels, fp2)
     
     
    
