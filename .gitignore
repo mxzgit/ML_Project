@@ -130,6 +130,8 @@ Session.vim
 *bin*
 *archive*
 
+
+.vscode/
 # Temporarly make file
 *.d
 
