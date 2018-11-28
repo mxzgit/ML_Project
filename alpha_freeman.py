@@ -11,7 +11,7 @@ from mnist import MNIST
 from numpy import array, uint8
 import cv2
 import pickle
-
+import numpy as np
 
 vis = array( [False] * (28*28) )
 vis = vis.reshape([28, 28])
@@ -285,16 +285,22 @@ def inflate_component(img_bw):
     return temp_img
 
 if __name__ == "__main__":
-
-    threshold = 100
-    mndata = MNIST('data\\')
     
+    test_images = pickle.load(open("test_images.data", "rb"))
+    test_images = np.array(test_images)
+
+    train_images = pickle.load(open("train_images.data", "rb"))
+    train_images = np.array(train_images)
+
+    print(train_images.shape)
+    print(test_images.shape)
+
     for coco in range(2):
         itemlist = []
         if coco == 0:
-            images, labels = mndata.load_testing()
+            images = test_images
         else:
-            images, labels = mndata.load_training()
+            images = train_images
         print("read done")
         number_images = int(len(images))
         print(number_images)
@@ -305,6 +311,8 @@ if __name__ == "__main__":
             im_gray = im_gray.reshape([28, 28])
             im_gray = im_gray.astype(uint8)
             
+            #pt.imshow(im_gray)
+            #pt.show()
             #im_bw = cv2.adaptiveThreshold(im_gray, 255,cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY ,11,2) 
             (thresh, im_bw) = cv2.threshold(im_gray, 30, 255, cv2.THRESH_BINARY)
 
@@ -321,16 +329,10 @@ if __name__ == "__main__":
                 print(i)
 
         if coco == 0:
-            with open('test.data', 'wb') as fp1:
+            with open('test_code.data', 'wb') as fp1:
                 pickle.dump(itemlist, fp1)
-            with open('test_labels.data', 'wb') as fp2:
-                pickle.dump(labels, fp2)
         else:
-            with open('train.data', 'wb') as fp1:
+            with open('train_code.data', 'wb') as fp1:
                 pickle.dump(itemlist, fp1)
-            with open('train_labels.data', 'wb') as fp2:
-                pickle.dump(labels, fp2)
-    
-    
-   
+
     
