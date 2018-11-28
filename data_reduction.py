@@ -12,6 +12,7 @@ def bayesianReduction(X, y, dists=None):
     if dists is None:
         dists = -1 * np.ones((m, m)) #memo
 
+    np.random.seed(27)
     perm = np.random.permutation(m)
     S1 = set(perm[:m//2])
     S2 = set(perm[m//2:])
