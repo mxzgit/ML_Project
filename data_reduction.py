@@ -9,7 +9,7 @@ from timeit import default_timer as timer
 
 def bayesianReduction(X, y, dists=None):
     m = len(X)
-    if dists == None:
+    if dists is None:
         dists = -1 * np.ones((m, m)) #memo
 
     perm = np.random.permutation(m)
@@ -21,7 +21,7 @@ def bayesianReduction(X, y, dists=None):
         S2_oldsize = len(S2) 
 
         # 1-NN classify S1 with S2
-        for i in S1:
+        for i in S1.copy():
             predindex = -1
             mindist = -1
             
@@ -36,7 +36,7 @@ def bayesianReduction(X, y, dists=None):
                 S1.remove(i)
         
         # 1-NN classify S2 with S1
-        for i in S2:
+        for i in S2.copy():
             predindex = -1
             mindist = -1
             
@@ -51,21 +51,23 @@ def bayesianReduction(X, y, dists=None):
                 S2.remove(i)
         
         if len(S1) == S1_oldsize and len(S2) == S2_oldsize:
-            converged == True
+            converged = True
 
     return sorted(S1.union(S2)), dists
 
 
-def condensedNN(X, y, dists=None):
-    m = len(X)
+def condensedNN(X, y, ind=None, dists=None):
+    if ind is None:
+        ind = range(len(X))
+    m = len(ind)
     storage = set()
-    storage.add(0)
-    if dists == None:
+    storage.add(ind[0])
+    if dists is None:
         dists = -1 * np.ones((m, m)) # memo
     converged = False
     while not converged:
         lastsize = len(storage)
-        for i in range(len(X)):
+        for i in ind:
             if i not in storage:
                 predindex = -1
                 mindist = -1
@@ -98,12 +100,10 @@ if __name__ == "__main__":
 
     print(f"starting with size={size}!")
     start = timer()
-    ind, dists = bayesianReduction(_X, _y)
-    _X = _X[ind]
-    _y = _y[ind]
+    ind, distMat = bayesianReduction(_X, _y)
     print(f"finished baysianReduction with size={len(ind)}")
     print(f"time elapsed: {timer() - start}s")
     start = timer()
-    storage, dists = condensedNN(_X, _y, dists)
+    storage, distMat = condensedNN(_X, _y, ind, dists=distMat)
     print(f"finished CNN with size={len(storage)}")
     print(f"time elapsed: {timer() - start}s")
