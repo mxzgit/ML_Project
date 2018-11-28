@@ -1,0 +1,10 @@
+Freeman code:
+    Fix disconneced problem
+    Fix under the first cell
+    missing part without disconnecing the graph
+
+
+    weighted edit distance
+    scale images
+    
+

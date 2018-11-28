@@ -1,6 +1,6 @@
-import cv2
+from cv2 import imread
 import numpy as np
-
+from matplotlib import pylab as pt
 
 def filter_mean(img, bloc_size):
 
@@ -21,8 +21,15 @@ def filter_mean(img, bloc_size):
 
 if __name__ == "__main__":
 
-    path = 'noise_bzef.png'
-    img = cv2.imread(path, 0)
+    path = 'badbad.png'
+    img = imread(path, 0)
+    #cv2.imshow('', img)
+    #cv2.waitKey(0)
+    pt.imshow(img)
+    pt.show()
     newimg = filter_mean(img, 5)
-    cv2.imshow('', newimg)
-    cv2.waitKey(0)
+    pt.imshow(newimg)
+    pt.show()
+
+    #cv2.imshow('', newimg)
+    #cv2.waitKey(0)

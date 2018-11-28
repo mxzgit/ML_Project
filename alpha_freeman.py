@@ -22,9 +22,12 @@ dy4 = [1,0,-1, 0]
 dx8 = [-1,-1, 0, 1, 1, 1, 0,-1]
 dy8 = [ 0, 1, 1, 1, 0,-1,-1,-1]
 
+def in_board(x,y):
+    return x >=0 and x < 28 and y >=0 and y < 28
+
 def check_4_neighbors(x,y,image):
     for z in range(4):
-        if x+dx4[z] >= 0 and x+dx4[z] < 28 and y+dy4[z] >= 0 and y+dy4[z] < 28: 
+        if in_board(x+dx4[z],y+dy4[z]) : 
             if image[ x+dx4[z] , y+dy4[z] ] == 255:
                 return True
     return False
@@ -103,7 +106,6 @@ def get_chain(img):
 
     return img, chain
 
-
 def my_freeman_calc(img):
 
     img = get_boarders(img)
@@ -116,7 +118,6 @@ def my_freeman_calc(img):
 def check_point_inside(point):
     x,y = point
     return x >= 0 and x < 28 and y >= 0 and y < 28
-
 
 def freeman_calc(img):
 
@@ -195,7 +196,7 @@ def dfs_count(img,x,y):
     vis[x,y] = True
 
     for z in range(8):
-        if x+dx8[z] >= 0 and x+dx8[z] < 28 and y+dy8[z] >= 0 and y+dy8[z] < 28:
+        if check_point_inside((x+dx8[z],y+dy8[z])):
             dfs_count(img,x+dx8[z],y+dy8[z]) 
 
 def count_component(im_bw):
@@ -208,8 +209,8 @@ def count_component(im_bw):
             if im_bw[i,j] == 255 and not vis[i,j]:
                 ret += 1
                 dfs_count(im_bw,i,j)
+    
     return ret
-
 
 def BS_threshold(im_gray):
 
@@ -234,14 +235,60 @@ def BS_threshold(im_gray):
     print("BS did not find a solution!!")
     pt.imshow(im_gray)
     pt.show()
-    cv2.imwrite('C:\\Users\\Muaz\\Desktop\\MLDM project\\ML_Project\\badbad.png',im_gray)
+    cv2.imwrite('badbad.png',im_gray)
     exit(2)
     return cv2.threshold(im_gray, ret, 255, cv2.THRESH_BINARY)
+
+# connect image
+def fill(img,x,y,c):
+
+    if img[x,y] != 255 or vis[x,y] != -1:
+        return
+    vis[x,y] = c
+
+    for z in range(8):
+        if check_point_inside((x+dx8[z],y+dy8[z])):
+            fill(img,x+dx8[z],y+dy8[z],c) 
+
+def connect_two_comp(i,j):
+    vis = array( [-1] * (28*28) )
+    vis = vis.reshape([28, 28])
     
+def connect_image_old(img_bw):
+    vis = array( [-1] * (28*28) )
+    vis = vis.reshape([28, 28])
+    cur_component = 0
+    for i in range(28):
+        for j in range(28):
+            if img_bw[i,j] == 255 and vis[i,j] == -1:
+                fill(img_bw,i,j,cur_component)
+
+    inter_comp_dis = [[-1 for _ in range(cur_component)] for _ in range(cur_component) ]
+
+    for i in range(cur_component):
+        for j in range(i+1,cur_component):
+            connect_two_comp(i,j)
+
+def fill_8_neighbors(x,y,img):
+    for z in range(8):
+        xx = x + dx8[z]
+        yy = y + dy8[z]
+        if in_board(xx,yy):
+            img[xx,yy] = 255
+
+def inflate_component(img_bw):
+    temp_img = img_bw
+    for i in range(28):
+        for j in range(28):
+            if img_bw[i,j] == 255:
+                fill_8_neighbors(i,j,temp_img)
+    return temp_img
+
 if __name__ == "__main__":
 
     threshold = 100
-    mndata = MNIST('C:\\Users\\Muaz\\Desktop\\MLDM project\\ML_Project\\data')
+    mndata = MNIST('data\\')
+    
     for coco in range(2):
         itemlist = []
         if coco == 0:
@@ -249,40 +296,30 @@ if __name__ == "__main__":
         else:
             images, labels = mndata.load_training()
         print("read done")
-        for i in range(694,len(images)):
+        number_images = int(len(images))
+        print(number_images)
+        for i in range(number_images):
             
-            print (i)
+            #print (i)
             im_gray = array(images[i])
             im_gray = im_gray.reshape([28, 28])
             im_gray = im_gray.astype(uint8)
             
-           
             #im_bw = cv2.adaptiveThreshold(im_gray, 255,cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY ,11,2) 
-            (thresh, im_bw) = cv2.threshold(im_gray, 127, 255, cv2.THRESH_BINARY)
-            if count_component(im_bw) > 1:
-                print("*****")
-                (thresh, im_bw) = BS_threshold(im_gray) 
+            (thresh, im_bw) = cv2.threshold(im_gray, 30, 255, cv2.THRESH_BINARY)
 
-         
-            code_bw, code = freeman_calc(im_bw)
-         
+            #if count_component(im_bw) > 1:
+            #    (thresh, im_bw) = cv2.threshold(im_gray, 30, 255, cv2.THRESH_BINARY)
+            while count_component(im_bw) > 1:
+                im_bw = inflate_component(im_bw)
             
-            if len(code) < 20:
-                #print("coco")
-                #pt.imshow(code_bw)
-                #pt.show()
-                #pt.imshow(im_gray)
-                #pt.show()
-                print(thresh)
-                (thresh, im_bw) = cv2.threshold(im_gray, threshold, 255, cv2.THRESH_BINARY)
-                pt.imshow(im_bw)
-                pt.show()
-
+            code = []
+            code_bw, code = freeman_calc(im_bw)
+            
             itemlist.append(code)
             if i % 100 == 0:
-                print(i/100)
-                
-    
+                print(i)
+
         if coco == 0:
             with open('test.data', 'wb') as fp1:
                 pickle.dump(itemlist, fp1)
