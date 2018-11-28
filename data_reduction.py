@@ -9,9 +9,10 @@ from timeit import default_timer as timer
 
 def bayesianReduction(X, y, dists=None):
     m = len(X)
-    if dists == None:
+    if dists is None:
         dists = -1 * np.ones((m, m)) #memo
 
+    np.random.seed(27)
     perm = np.random.permutation(m)
     S1 = set(perm[:m//2])
     S2 = set(perm[m//2:])
@@ -21,7 +22,7 @@ def bayesianReduction(X, y, dists=None):
         S2_oldsize = len(S2) 
 
         # 1-NN classify S1 with S2
-        for i in S1:
+        for i in S1.copy():
             predindex = -1
             mindist = -1
             
@@ -36,7 +37,7 @@ def bayesianReduction(X, y, dists=None):
                 S1.remove(i)
         
         # 1-NN classify S2 with S1
-        for i in S2:
+        for i in S2.copy():
             predindex = -1
             mindist = -1
             
@@ -51,21 +52,23 @@ def bayesianReduction(X, y, dists=None):
                 S2.remove(i)
         
         if len(S1) == S1_oldsize and len(S2) == S2_oldsize:
-            converged == True
+            converged = True
 
     return sorted(S1.union(S2)), dists
 
 
-def condensedNN(X, y, dists=None):
-    m = len(X)
+def condensedNN(X, y, ind=None, dists=None):
+    if ind is None:
+        ind = range(len(X))
+    m = len(ind)
     storage = set()
-    storage.add(0)
-    if dists == None:
+    storage.add(ind[0])
+    if dists is None:
         dists = -1 * np.ones((m, m)) # memo
     converged = False
     while not converged:
         lastsize = len(storage)
-        for i in range(len(X)):
+        for i in ind:
             if i not in storage:
                 predindex = -1
                 mindist = -1
@@ -83,7 +86,7 @@ def condensedNN(X, y, dists=None):
         if lastsize == len(storage):
             converged = True
 
-    return storage, dists
+    return sorted(storage), dists
 
 if __name__ == "__main__":
     X = pickle.load(open("train.data", "rb"))
@@ -92,18 +95,23 @@ if __name__ == "__main__":
     y = pickle.load(open("train_labels.data", "rb"))
     y = np.array(y)
 
-    size = 1000
+    size = 50
     _X = X[:size]
     _y = y[:size]
 
     print(f"starting with size={size}!")
     start = timer()
-    ind, dists = bayesianReduction(_X, _y)
-    _X = _X[ind]
-    _y = _y[ind]
+    ind, distMat = bayesianReduction(_X, _y)
     print(f"finished baysianReduction with size={len(ind)}")
     print(f"time elapsed: {timer() - start}s")
     start = timer()
-    storage, dists = condensedNN(_X, _y, dists)
-    print(f"finished CNN with size={len(storage)}")
+    ind, distMat = condensedNN(_X, _y, ind=ind, dists=distMat)
+    print(f"finished CNN with size={len(ind)}")
     print(f"time elapsed: {timer() - start}s")
+    print("dumping reducted data...")
+    X_reduct = _X[ind]
+    y_reduct = _y[ind]
+    pickle.dump(ind, open("train_reduct_ind.data", "wb"))
+    pickle.dump(X_reduct, open("train_reduct.data", "wb"))
+    pickle.dump(y_reduct, open("train_labels_reduct.data", "wb"))
+    print("done.!")
