@@ -89,13 +89,13 @@ def condensedNN(X, y, ind=None, dists=None):
     return sorted(storage), dists
 
 if __name__ == "__main__":
-    X = pickle.load(open("train.data", "rb"))
+    X = pickle.load(open("train_code.data", "rb"))
     X = np.array(X)
 
     y = pickle.load(open("train_labels.data", "rb"))
     y = np.array(y)
 
-    size = 50
+    size = len(X)
     _X = X[:size]
     _y = y[:size]
 
