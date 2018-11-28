@@ -20,15 +20,25 @@ for i in range(m):
 y = pickle.load(open("train_labels.data", "rb"))
 y = np.array(y)
 
-_XX = XX[:600, :]
-_y = y[: 600]
+_XX = XX[:60, :]
+_y = y[: 60]
 
 knn = KNeighborsClassifier(n_neighbors=1,
-                    algorithm='auto',
+                    algorithm='brute',
                     metric=dp_rolling_ed)
+from timeit import default_timer as timer
+
+start = timer()
 
 knn.fit(_XX, _y)
 
-pred = knn.predict(XX[601:700, :])
-acuracy = (pred == y[601:700]).mean() * 100
+mid = timer()
+
+pred = knn.predict(XX[-60:, :])
+
+end = timer()
+
+acuracy = (pred == y[-60:]).mean() * 100
 print(f'acuracy = {int(acuracy)}%')
+print(f'fit time elapsed = {mid - start}s')
+print(f'predict time elapsed = {end - mid}s')
