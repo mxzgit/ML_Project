@@ -85,7 +85,7 @@ def condensedNN(X, y, ind=None, dists=None):
         if lastsize == len(storage):
             converged = True
 
-    return storage, dists
+    return sorted(storage), dists
 
 if __name__ == "__main__":
     X = pickle.load(open("train.data", "rb"))
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     y = pickle.load(open("train_labels.data", "rb"))
     y = np.array(y)
 
-    size = 1000
+    size = 50
     _X = X[:size]
     _y = y[:size]
 
@@ -104,6 +104,13 @@ if __name__ == "__main__":
     print(f"finished baysianReduction with size={len(ind)}")
     print(f"time elapsed: {timer() - start}s")
     start = timer()
-    storage, distMat = condensedNN(_X, _y, ind, dists=distMat)
-    print(f"finished CNN with size={len(storage)}")
+    ind, distMat = condensedNN(_X, _y, ind=ind, dists=distMat)
+    print(f"finished CNN with size={len(ind)}")
     print(f"time elapsed: {timer() - start}s")
+    print("dumping reducted data...")
+    X_reduct = _X[ind]
+    y_reduct = _y[ind]
+    pickle.dump(ind, open("train_reduct_ind.data", "wb"))
+    pickle.dump(X_reduct, open("train_reduct.data", "wb"))
+    pickle.dump(y_reduct, open("train_labels_reduct.data", "wb"))
+    print("done.!")
