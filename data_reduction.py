@@ -99,16 +99,16 @@ if __name__ == "__main__":
     _X = X[:size]
     _y = y[:size]
 
-    print(f"starting with size={size}!")
-    start = timer()
+    print(size)
+    #start = timer()
     ind, distMat = bayesianReduction(_X, _y)
-    print(f"finished baysianReduction with size={len(ind)}")
-    print(f"time elapsed: {timer() - start}s")
-    start = timer()
+    #print(f"finished baysianReduction with size={len(ind)}")
+    #print(f"time elapsed: {timer() - start}s")
+    #start = timer()
     ind, distMat = condensedNN(_X, _y, ind=ind, dists=distMat)
-    print(f"finished CNN with size={len(ind)}")
-    print(f"time elapsed: {timer() - start}s")
-    print("dumping reducted data...")
+    #print(f"finished CNN with size={len(ind)}")
+    #print(f"time elapsed: {timer() - start}s")
+    #print("dumping reducted data...")
     X_reduct = _X[ind]
     y_reduct = _y[ind]
     pickle.dump(ind, open("train_reduct_ind.data", "wb"))
