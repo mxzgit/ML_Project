@@ -7,12 +7,11 @@
 #
 
 from matplotlib import pylab as pt
-from mnist import MNIST
 from numpy import array, uint8
 import cv2
 import pickle
 import numpy as np
-
+#s
 vis = array( [False] * (28*28) )
 vis = vis.reshape([28, 28])
 
