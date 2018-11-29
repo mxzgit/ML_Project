@@ -49,6 +49,8 @@ num_test_img = 10
 weight_svm = []
 labels_svm = []
 
+weight_test = []
+labels_test = []
 
 with tf.Session() as sess:
     sess.run(init)
@@ -70,11 +72,21 @@ with tf.Session() as sess:
         r = sess.run(hide_layer2,feed_dict={X:X_batch})
         weight_svm.append(r)
         labels_svm.append(y_batch)
-
+    
+    num_batch_test = mnist.test.num_examples // batch_size
+    for iteration in range(num_batch_test):
+        x_test,y_test = mnist.test.next_batch(batch_size)
+        weight_test.append(sess.run(hide_layer2,feed_dict={X:x_test}))
+        labels_test.append(y_test)
 
 clf = svm.SVC(gamma='scale', decision_function_shape='ovo')
-print(labels_svm[0])
+#print(labels_svm[0])
 for i in range(len(labels_svm)):
 
     clf.fit(weight_svm[i],labels_svm[i])
+score = []
+for i in range(len(labels_test)):
+    score.append(clf.score(weight_test[i],labels_test[i]))
 
+plt.plot(score)
+plt.show()
