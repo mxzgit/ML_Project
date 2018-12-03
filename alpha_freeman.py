@@ -11,9 +11,12 @@ from numpy import array, uint8
 import cv2
 import pickle
 import numpy as np
+
+x_d = 14
+y_d = 14
 #s
-vis = array( [False] * (28*28) )
-vis = vis.reshape([28, 28])
+vis = array( [False] * (x_d*y_d) )
+vis = vis.reshape([x_d, y_d])
 
 dx4 = [0,1, 0,-1]
 dy4 = [1,0,-1, 0]
@@ -22,7 +25,7 @@ dx8 = [-1,-1, 0, 1, 1, 1, 0,-1]
 dy8 = [ 0, 1, 1, 1, 0,-1,-1,-1]
 
 def in_board(x,y):
-    return x >=0 and x < 28 and y >=0 and y < 28
+    return x >=0 and x < x_d and y >=0 and y < y_d
 
 def check_4_neighbors(x,y,image):
     for z in range(4):
@@ -41,19 +44,19 @@ def dfs(x,y,img):
         vis[x,y] = 255
 
     for z in range(4):
-        if x+dx4[z] >= 0 and x+dx4[z] < 28 and y+dy4[z] >= 0 and y+dy4[z] < 28:
+        if x+dx4[z] >= 0 and x+dx4[z] < x_d and y+dy4[z] >= 0 and y+dy4[z] < y_d:
             dfs(x+dx4[z],y+dy4[z],img) 
     
 def get_boarders(img):
     global vis
-    vis = array( [0] * (28*28) )
-    vis = vis.reshape([28, 28])
-    for i in range(0,28):
-        img[i,0] = img[0,i] = img[i,27] = img[27,i] = 0
+    vis = array( [0] * (x_d*y_d) )
+    vis = vis.reshape([x_d, y_d])
+    for i in range(0,x_d):
+        img[i,0] = img[0,i] = img[i,y_d-1] = img[x_d-1,i] = 0
     dfs(0,0,img)
           
-    for i in range(0,28):
-        for j in range(0,28):
+    for i in range(0,x_d):
+        for j in range(0,y_d):
             if vis[i,j] == 255:
                 img[i,j] = 255
             else:
@@ -63,8 +66,8 @@ def get_boarders(img):
 def get_chain(img):
     chain = []
     start_point = (-1,-1)
-    for i in range(0,28):
-        for j in range(0,28):
+    for i in range(0,x_d):
+        for j in range(0,y_d):
             if img[i,j] == 255:
                 start_point = (i,j)
                 break
@@ -74,14 +77,14 @@ def get_chain(img):
     current_point = (-1,-1)
     x,y = start_point
     for z in range(8):
-        if x+dx8[z] >= 0 and x+dx8[z] < 28 and y+dy8[z] >= 0 and y+dy8[z] < 28: 
+        if x+dx8[z] >= 0 and x+dx8[z] < x_d and y+dy8[z] >= 0 and y+dy8[z] < y_d: 
             if img[ x+dx8[z] , y+dy8[z] ] == 255: 
                 current_point = x+dx8[z] , y+dy8[z]
                 chain.append(z)
                 break
     
-    vis = array( [0] * (28*28) )
-    vis = vis.reshape([28, 28])
+    vis = array( [0] * (x_d*y_d) )
+    vis = vis.reshape([x_d, y_d])
 
     vis[current_point] = vis[start_point] = 255
     
@@ -89,15 +92,15 @@ def get_chain(img):
         print(current_point)
         x,y = current_point
         for z in range(8):
-            if x+dx8[z] >= 0 and x+dx8[z] < 28 and y+dy8[z] >= 0 and y+dy8[z] < 28: 
+            if x+dx8[z] >= 0 and x+dx8[z] < x_d and y+dy8[z] >= 0 and y+dy8[z] < y_d: 
                 if img[ x+dx8[z] , y+dy8[z] ] == 255 and vis[ x+dx8[z] , y+dy8[z] ] != 255: 
                     current_point = x+dx8[z] , y+dy8[z]
                     vis[current_point] = 255
                     chain.append(z)
                     break
     
-    for i in range(0,28):
-        for j in range(0,28):
+    for i in range(0,x_d):
+        for j in range(0,y_d):
             if vis[i,j] == 255:
                 img[i,j] = 255
             else:
@@ -116,12 +119,12 @@ def my_freeman_calc(img):
 
 def check_point_inside(point):
     x,y = point
-    return x >= 0 and x < 28 and y >= 0 and y < 28
+    return x >= 0 and x < x_d and y >= 0 and y < y_d
 
 def freeman_calc(img):
 
-    vis = array( [False] * (28*28) )
-    vis = vis.reshape([28, 28])
+    vis = array( [False] * (x_d*y_d) )
+    vis = vis.reshape([x_d, y_d])
 
     done = False
     for i in range(img.shape[0]):
@@ -180,8 +183,8 @@ def freeman_calc(img):
         if count == 1000: break
         count += 1
    
-    for i in range(0,28):
-        for j in range(0,28):
+    for i in range(0,x_d):
+        for j in range(0,y_d):
             if vis[i,j]:
                 img[i,j] = 255
             else:
@@ -200,11 +203,11 @@ def dfs_count(img,x,y):
 
 def count_component(im_bw):
     global vis
-    vis = array( [False] * (28*28) )
-    vis = vis.reshape([28, 28])
+    vis = array( [False] * (x_d*y_d) )
+    vis = vis.reshape([x_d, y_d])
     ret = 0
-    for i in range(28):
-        for j in range(28):
+    for i in range(x_d):
+        for j in range(y_d):
             if im_bw[i,j] == 255 and not vis[i,j]:
                 ret += 1
                 dfs_count(im_bw,i,j)
@@ -250,15 +253,15 @@ def fill(img,x,y,c):
             fill(img,x+dx8[z],y+dy8[z],c) 
 
 def connect_two_comp(i,j):
-    vis = array( [-1] * (28*28) )
-    vis = vis.reshape([28, 28])
+    vis = array( [-1] * (x_d*y_d) )
+    vis = vis.reshape([x_d, y_d])
     
 def connect_image_old(img_bw):
-    vis = array( [-1] * (28*28) )
-    vis = vis.reshape([28, 28])
+    vis = array( [-1] * (x_d*y_d) )
+    vis = vis.reshape([x_d, y_d])
     cur_component = 0
-    for i in range(28):
-        for j in range(28):
+    for i in range(x_d):
+        for j in range(y_d):
             if img_bw[i,j] == 255 and vis[i,j] == -1:
                 fill(img_bw,i,j,cur_component)
 
@@ -277,8 +280,8 @@ def fill_8_neighbors(x,y,img):
 
 def inflate_component(img_bw):
     temp_img = img_bw
-    for i in range(28):
-        for j in range(28):
+    for i in range(x_d):
+        for j in range(y_d):
             if img_bw[i,j] == 255:
                 fill_8_neighbors(i,j,temp_img)
     return temp_img
@@ -319,7 +322,7 @@ if __name__ == "__main__":
             #cv2.waitKey(0)
             #cv2.imwrite("resizeimg.jpg",im_gray)
             #exit(1)
-
+            #print('shap: ',im_gray.shape)
             (thresh, im_bw) = cv2.threshold(im_gray, 30, 255, cv2.THRESH_BINARY)
 
             while count_component(im_bw) > 1:

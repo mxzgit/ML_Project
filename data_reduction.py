@@ -6,6 +6,7 @@ import pickle
 import numpy as np
 from dp_rolling import dp_rolling_ed
 from timeit import default_timer as timer
+import sys
 
 def bayesianReduction(X, y, dists=None):
     m = len(X)
@@ -17,42 +18,45 @@ def bayesianReduction(X, y, dists=None):
     S1 = set(perm[:m//2])
     S2 = set(perm[m//2:])
     converged = False
+    rounds = 0
     while not converged:
-        S1_oldsize = len(S1)
-        S2_oldsize = len(S2) 
+        converged = True
+        rounds += 1
+        if rounds%10 == 0:
+            print(rounds)
+            sys.stdout.flush()
 
         # 1-NN classify S1 with S2
         for i in S1.copy():
             predindex = -1
-            mindist = -1
+            mindist = (1 << 60)
             
             for j in S2:
                 if dists[i, j] == -1:
                     dists[i, j] = dists[j, i] = dp_rolling_ed(X[i], X[j])
-                if mindist == -1 or mindist > dists[i, j]:
+                if mindist > dists[i, j]:
                     predindex = j
                     mindist = dists[i, j]
 
             if y[i] != y[predindex]:
                 S1.remove(i)
+                converged = False
         
         # 1-NN classify S2 with S1
         for i in S2.copy():
             predindex = -1
-            mindist = -1
+            mindist = (1 << 60)
             
             for j in S1:
                 if dists[i, j] == -1:
                     dists[i, j] = dists[j, i] = dp_rolling_ed(X[i], X[j])
-                if mindist == -1 or mindist > dists[i, j]:
+                if mindist > dists[i, j]:
                     predindex = j
                     mindist = dists[i, j]
 
             if y[i] != y[predindex]:
                 S2.remove(i)
-        
-        if len(S1) == S1_oldsize and len(S2) == S2_oldsize:
-            converged = True
+                converged = False
 
     return sorted(S1.union(S2)), dists
 
@@ -89,12 +93,15 @@ def condensedNN(X, y, ind=None, dists=None):
     return sorted(storage), dists
 
 if __name__ == "__main__":
-    X = pickle.load(open("train_code.data", "rb"))
+    X = pickle.load(open("train_code_scaled_half.data", "rb"))
     X = np.array(X)
-
+    
     y = pickle.load(open("train_labels.data", "rb"))
     y = np.array(y)
-
+    #print(max([len(x) for x in X]))
+    print(X)
+    #print(max([len(x) for x in y]))
+    #exit(1)
     size = len(X)
     _X = X[:size]
     _y = y[:size]
@@ -111,7 +118,7 @@ if __name__ == "__main__":
     #print("dumping reducted data...")
     X_reduct = _X[ind]
     y_reduct = _y[ind]
-    pickle.dump(ind, open("train_reduct_ind.data", "wb"))
-    pickle.dump(X_reduct, open("train_reduct.data", "wb"))
-    pickle.dump(y_reduct, open("train_labels_reduct.data", "wb"))
+    pickle.dump(ind, open("train_reduct_ind_scaled_half.data", "wb"))
+    pickle.dump(X_reduct, open("train_reduct_scaled_half.data", "wb"))
+    pickle.dump(y_reduct, open("train_labels_reduct_scaled_half.data", "wb"))
     print("done.!")
