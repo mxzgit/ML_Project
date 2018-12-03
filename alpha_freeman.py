@@ -310,13 +310,8 @@ if __name__ == "__main__":
             im_gray = im_gray.reshape([28, 28])
             im_gray = im_gray.astype(uint8)
             
-            #pt.imshow(im_gray)
-            #pt.show()
-            #im_bw = cv2.adaptiveThreshold(im_gray, 255,cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY ,11,2) 
             (thresh, im_bw) = cv2.threshold(im_gray, 30, 255, cv2.THRESH_BINARY)
 
-            #if count_component(im_bw) > 1:
-            #    (thresh, im_bw) = cv2.threshold(im_gray, 30, 255, cv2.THRESH_BINARY)
             while count_component(im_bw) > 1:
                 im_bw = inflate_component(im_bw)
             

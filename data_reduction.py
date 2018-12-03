@@ -95,7 +95,7 @@ if __name__ == "__main__":
     y = pickle.load(open("train_labels.data", "rb"))
     y = np.array(y)
 
-    size = 50
+    size = len(X)
     _X = X[:size]
     _y = y[:size]
 
