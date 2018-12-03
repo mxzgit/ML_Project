@@ -309,7 +309,17 @@ if __name__ == "__main__":
             im_gray = array(images[i])
             im_gray = im_gray.reshape([28, 28])
             im_gray = im_gray.astype(uint8)
-            
+            #cv2.imshow("Show by CV2 first image",im_gray)
+            #print('shap: ',im_gray.shape)
+            height, width = im_gray.shape
+            imgScale = .5
+            newX,newY = im_gray.shape[1]*imgScale, im_gray.shape[0]*imgScale
+            im_gray = cv2.resize(im_gray,(int(newX),int(newY)))
+            #cv2.imshow("Show by CV2 second image",im_gray)
+            #cv2.waitKey(0)
+            #cv2.imwrite("resizeimg.jpg",im_gray)
+            #exit(1)
+
             (thresh, im_bw) = cv2.threshold(im_gray, 30, 255, cv2.THRESH_BINARY)
 
             while count_component(im_bw) > 1:
@@ -323,10 +333,10 @@ if __name__ == "__main__":
                 print(i)
 
         if coco == 0:
-            with open('test_code.data', 'wb') as fp1:
+            with open('test_code_scaled_half.data', 'wb') as fp1:
                 pickle.dump(itemlist, fp1)
         else:
-            with open('train_code.data', 'wb') as fp1:
+            with open('train_code_scaled_half.data', 'wb') as fp1:
                 pickle.dump(itemlist, fp1)
 
     
