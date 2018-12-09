@@ -38,3 +38,10 @@ def dp_rolling_ed(s1, s2):
 
 if __name__ == "__main__":
 	print(dp_rolling_ed("02156", "431515"))
+	print(dp_rolling_ed("342345", "12366546"))
+	print(dp_rolling_ed("056652156", "431123132515"))
+	print(dp_rolling_ed("34534534535345353", "431515"))
+	print(dp_rolling_ed("214513654", "1247650165725"))
+	
+
+	

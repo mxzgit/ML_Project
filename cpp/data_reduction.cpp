@@ -80,19 +80,16 @@ vi bayesianReduction(vector<string> X,vi y)
 	int m = X.size();
 	int mid = m/2;
 	vi S1,S2,XX;
+	
 	for (int i=0;i<m;i++)
 		XX.pb(i);
     random_shuffle(XX.begin(),XX.end());
-	for (int i=0;i<mid;i++){
+	for (int i=0;i<mid;i++)
 		S1.pb(XX[i]);
-		//cout<<XX[i]<<' ';
-	}
-	//cout<<'\n';
-	for (int i=mid;i<m;i++){
+
+	for (int i=mid;i<m;i++)
 		S2.pb(XX[i]);
-		//cout<<XX[i]<<' ';
-	}
-	//cout<<'\n';
+
     bool converged = false;
     int rounds = 0;
 	
@@ -103,8 +100,6 @@ vi bayesianReduction(vector<string> X,vi y)
         
         for (int ii=0; ii < S1.size();ii++)
 		{
-			//if(ii%100==0)
-			//	cout<<ii<<endl;
 			int i = S1[ii];
             int predindex = -1;
             double mindist = OO;
@@ -203,8 +198,6 @@ vi condensedNN(vector<string> X,vi y,vi ind)
 		converged = true;
         for(int ii=0; ii<ind.size() ; ii++)
 		{
-			//if(ii%100==0)
-			//	cout<<ii<<endl;
 			int i = ind[ii];
             if( !in_storage[i])
 			{
@@ -233,7 +226,7 @@ vi condensedNN(vector<string> X,vi y,vi ind)
 				}
 			}
 			else{
-				cout<<"baaaaaaaaaad\n";
+				cout<<"This should never be executed!\n";
 				exit(1);
 			}
 		}

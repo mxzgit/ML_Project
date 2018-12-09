@@ -99,14 +99,14 @@ if __name__ == "__main__":
     y = pickle.load(open("train_labels.data", "rb"))
     y = np.array(y)
     #print(max([len(x) for x in X]))
-    print(X)
+    #print(X)
     #print(max([len(x) for x in y]))
     #exit(1)
     size = len(X)
     _X = X[:size]
     _y = y[:size]
 
-    print(size)
+    #print(size)
     #start = timer()
     ind, distMat = bayesianReduction(_X, _y)
     #print(f"finished baysianReduction with size={len(ind)}")
