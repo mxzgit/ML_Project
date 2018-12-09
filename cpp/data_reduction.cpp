@@ -45,7 +45,7 @@ int total_dp_call = 0;
 
 double dp_rolling_ed(string s1,string s2)
 {
-	if(++total_dp_call % 1000 == 0){
+	if(++total_dp_call % 1000000 == 0){
 		cout<<"DP: "<<total_dp_call<<endl;
 		cout.flush();
 	}
