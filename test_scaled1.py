@@ -72,7 +72,7 @@ for nn in nnarr:
 	pred = knn.predict(X_test_array)
 	end = timer()
 	acuracy = (pred == Y_test).mean() * 100
-	print(f'acuracy = {int(acuracy)}%')
-	print(f'fit time elapsed = {mid - start}s')
-	print(f'predict time elapsed = {end - mid}s')
+	print('acuracy = ',acuracy)
+	#print(f'fit time elapsed = {mid - start}s')
+	#print(f'predict time elapsed = {end - mid}s')
 	sys.stdout.flush()
