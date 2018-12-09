@@ -6,10 +6,10 @@ from dp_rolling import dp_rolling_ed
 
 from sklearn.neighbors import KNeighborsClassifier
 
-X_train = pickle.load(open("train_code_scaled_half.data", "rb"))
+X_train = pickle.load(open("train_code_scaled.data", "rb"))
 X_train = np.array(X_train)
 
-X_test = pickle.load(open("test_code_scaled_half.data", "rb"))
+X_test = pickle.load(open("test_code_scaled.data", "rb"))
 X_test = np.array(X_test)
 
 m_train = X_train.shape[0]

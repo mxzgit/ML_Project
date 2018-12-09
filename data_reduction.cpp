@@ -10,7 +10,7 @@ typedef vector<pi > vpi;
 typedef vector< vpi> vvpi;
 
 #define mp  make_pair
-#define MAX_NUM 1000
+
 #define pb  push_back
 #define eps (1e-9)
 #define iseq(a,b) (fabs(a-b)<eps)
@@ -238,6 +238,7 @@ vi condensedNN(vector<string> X,vi y,vi ind)
 
 int main(int argc, char** argv)
 {
+	srand(time(0));
 	cout<<"start\n";
 	cout.flush();
 	for (int i=0; i<8 ; i++)
