@@ -8,7 +8,9 @@ typedef vector< vi> vvi;
 typedef pair<int, int> pi;
 typedef vector<pi > vpi;
 typedef vector< vpi> vvpi;
+
 #define mp  make_pair
+#define MAX_NUM 1000
 #define pb  push_back
 #define eps (1e-9)
 #define iseq(a,b) (fabs(a-b)<eps)
@@ -18,13 +20,16 @@ typedef vector< vpi> vvpi;
 #define valid(i, t) (0 <= (i) && (i) < (t))
 #define OO 0x7fffffff
 #define MOD 1000000007
-#define MAX_NUM 1000
+#define MAX_NUM 60000
 #define MAX_LEN 70
 #define OF 
 ll gcd(ll a, ll b) {return b == 0 ? a : gcd(b, a % b);}
 ll lcm(ll a, ll b) {return a * (b / gcd(a, b));}
 
-double dists[MAX_NUM][MAX_NUM];
+#define mph(i,j) ( ll(i)*MAX_NUM + j )
+
+unordered_map<ll,double> dists;
+
 bool del[MAX_NUM];
 bool in_storage[MAX_NUM];
 
@@ -107,10 +112,14 @@ vi bayesianReduction(vector<string> X,vi y)
             for (int jj=0; jj < S2.size() ; jj++)
 			{
 				int j = S2[jj];
-                if (dists[i][j] < 0)
-                    dists[i][j] = dists[j][i] = dp_rolling_ed(X[i], X[j]);
-                if (dists[i][j] < mindist)
-                    predindex = j, mindist = dists[i][j];
+				unordered_map<ll,double>::iterator it = dists.find(mph(i,j));
+                if (it == dists.end()){
+                    double ij_dis = dp_rolling_ed(X[i], X[j]);
+					dists.insert(mp(mph(i,j),ij_dis));
+					it = dists.insert(mp(mph(j,i),ij_dis)).first;
+				}
+                if (it->second < mindist)
+                    predindex = j, mindist = it->second;
 			}
             if (y[i] != y[predindex]){
                 converged = false;
@@ -135,10 +144,14 @@ vi bayesianReduction(vector<string> X,vi y)
             for (int ii=0; ii < S1.size();ii++)
 			{
 				int i = S1[ii];
-                if (dists[i][j] < 0)
-                    dists[i][j] = dists[j][i] = dp_rolling_ed(X[i], X[j]);
-                if (dists[i][j] < mindist)
-                    predindex = i, mindist = dists[i][j];
+				unordered_map<ll,double>::iterator it = dists.find(mph(i,j));
+                if (it == dists.end()){
+                    double ij_dis = dp_rolling_ed(X[i], X[j]);
+					dists.insert(mp(mph(i,j),ij_dis));
+					it = dists.insert(mp(mph(j,i),ij_dis)).first;
+				}
+                if (it->second < mindist)
+                    predindex = i, mindist = it->second;
 			}
 			if (y[j] != y[predindex]){
                 converged = false;
@@ -200,10 +213,15 @@ vi condensedNN(vector<string> X,vi y,vi ind)
                 for (int jj = 0; jj< storage.size(); jj++)
 				{
 					int j = storage[jj];
-                    if (dists[i][j] == -1)
-                        dists[i][j] = dists[j][i] = dp_rolling_ed(X[i], X[j]);
-                    if (mindist > dists[i][j])
-                        predindex = j, mindist = dists[i][j];
+					unordered_map<ll,double>::iterator it = dists.find(mph(i,j));
+					if (it == dists.end()){
+						double ij_dis = dp_rolling_ed(X[i], X[j]);
+						dists.insert(mp(mph(i,j),ij_dis));
+						it = dists.insert(mp(mph(j,i),ij_dis)).first;
+					}
+					if (it->second < mindist)
+						predindex = j, mindist = it->second;
+					
 				}
                 if (y[i] != y[predindex])
 				{
@@ -234,9 +252,7 @@ int main(int argc, char** argv)
 			dis[i][j] = double(min(abs(i - j), min(i, j) + 8 - max(i, j))) * 0.5;
 		
 	freopen("train_code_scaled_half.txt","r",stdin);
-	for (int i=0;i<MAX_NUM ; i++)
-		for (int j=0;j<MAX_NUM ; j++)
-			dists[i][j] = -1;
+	
 	string s;
 	vector<string> X;
 	vi y;
