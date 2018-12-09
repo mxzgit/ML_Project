@@ -37,7 +37,7 @@ def dp_rolling_ed(s1, s2):
 					cost = dis[int(s1[i - 1])][int(s2[j - 1])]
 					
 				_DP_ROLL[i % 2][j] = cost + min(_DP_ROLL[(i + 1) % 2][j],
-				                            _DP_ROLL[i % 2][j - 1], _DP_ROLL[(i + 1) % 2][j - 1])
+											_DP_ROLL[i % 2][j - 1], _DP_ROLL[(i + 1) % 2][j - 1])
 	return _DP_ROLL[sz1 % 2][sz2]
 
 if __name__ == "__main__":
