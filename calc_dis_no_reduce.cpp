@@ -45,8 +45,8 @@ int total_dp_call = 0;
 double dp_rolling_ed(string s1,string s2)
 {
 	if(++total_dp_call % 1000000 == 0){
-		cout<<"DP: "<<total_dp_call<<endl;
-		cout.flush();
+		cerr<<"DP: "<<total_dp_call<<endl;
+		cerr.flush();
 	}
 	int sz1 = s1.size();
 	int sz2 = s2.size();
@@ -258,7 +258,7 @@ int main(int argc, char** argv)
 		X_train.pb(s);
 	}
 		
-	cout<<"size X "<<X_train.size()<<endl;
+	cout<<"size X_train "<<X_train.size()<<endl;
 		
 	freopen("data/test_code_scaled.txt","r",stdin);
 	
@@ -269,6 +269,8 @@ int main(int argc, char** argv)
 			s[j] = int(s[j]) - int('0');
 		X_test.pb(s);		
 	}
+	
+	cout<<"size X_test "<<X_test.size()<<endl;
 	
 	freopen("train_test_dis_array_scaled_no_reduce.txt","w",stdout);
 	
