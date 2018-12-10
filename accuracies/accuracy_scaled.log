@@ -1,0 +1,10 @@
+scaled:
+k=1, accuracy=0.9291%
+k=3, accuracy=0.9364%
+k=5, accuracy=0.9391%
+k=10, accuracy=0.9387%
+k=30, accuracy=0.9319%
+k=50, accuracy=0.9256%
+k=100, accuracy=0.9166%
+k=300, accuracy=0.8949%
+k=500, accuracy=0.8827%

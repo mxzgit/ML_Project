@@ -1,0 +1,10 @@
+reduced scaled:
+k=1, accuracy=0.9084%
+k=3, accuracy=0.925%
+k=5, accuracy=0.9304%
+k=10, accuracy=0.9303%
+k=30, accuracy=0.9186%
+k=50, accuracy=0.9128%
+k=100, accuracy=0.892%
+k=300, accuracy=0.8268%
+k=500, accuracy=0.7444%
