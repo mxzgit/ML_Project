@@ -1,5 +1,6 @@
 """ compute knn accuracy """
 
+import sys
 import pickle
 import numpy as np
 
@@ -29,9 +30,10 @@ def knn_accuracy(y_train, y_test, dist, ks):
             if y_pred == y_test[i]:
                 count += 1
         print("k={0}, accuracy={1}%".format(k, count/y_test.size))
+        sys.stdout.flush()
 
 if __name__ == '__main__':
-    ks = [1, 3, 5, 10, 30, 50, 100, 300]
-    
+    ks = [1, 3, 5, 10, 30, 50, 100, 300, 500]
+
     print("reduced:")
     knn_accuracy(y_train1, y_test, dist1, ks)
