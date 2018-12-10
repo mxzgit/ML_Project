@@ -20,7 +20,7 @@ y_train1 = np.genfromtxt('data/reduced_train_label.txt', dtype='uint8')
 
 
 def knn_accuracy(y_train, y_test, dist, ks):
-    sortedind = dist1.argsort(axis=0)
+    sortedind = dist.argsort(axis=0)
     # majority vote
     for k in ks:
         count = 0
