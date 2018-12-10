@@ -237,7 +237,7 @@ vi condensedNN(vector<string> X,vi y,vi ind)
 
 int main(int argc, char** argv)
 {
-	const int red_num = ;
+	const int red_num = 4031;
 	const int test_sz = 10000;
 	
 	cout<<"start\n";
