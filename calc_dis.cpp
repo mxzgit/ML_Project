@@ -237,7 +237,7 @@ vi condensedNN(vector<string> X,vi y,vi ind)
 
 int main(int argc, char** argv)
 {
-	const int red_num = 2661;
+	const int red_num =4031 ;
 	const int test_sz = 10000;
 	
 	cout<<"start\n";
@@ -246,7 +246,7 @@ int main(int argc, char** argv)
 		for (int j=0; j<8 ; j++)
 			dis[i][j] = double(min(abs(i - j), min(i, j) + 8 - max(i, j))) * 0.5;
 		
-	freopen("data/train_code.txt","r",stdin);
+	freopen("data/train_code_scaled.txt","r",stdin);
 	
 	string s;
 	vector<string> X_train,X_train_reduced,X_test,X_train_print;
@@ -271,7 +271,7 @@ int main(int argc, char** argv)
 	
 	cout<<"size X "<<X_train.size()<<endl;
 	
-	freopen("data/reduced_train_indexes.txt","r",stdin);
+	freopen("data/reduced_train_scaled_indexes.txt","r",stdin);
 	freopen("reduced_train.txt","w",stdout);
 	int x;
 	for(int i = 0; i < red_num ; i++)
@@ -281,7 +281,7 @@ int main(int argc, char** argv)
 		X_train_reduced.pb(X_train[x]);
 	}
 	
-	freopen("data/reduced_train_indexes.txt","r",stdin);
+	freopen("data/reduced_train_scaled_indexes.txt","r",stdin);
 	freopen("reduced_train_label.txt","w",stdout);
 	
 	for(int i = 0; i < red_num ; i++)
@@ -291,7 +291,7 @@ int main(int argc, char** argv)
 	}
 	
 	
-	freopen("data/test_code.txt","r",stdin);
+	freopen("data/test_code_scaled.txt","r",stdin);
 	
 	for(int i=0; i < test_sz ; i++)
 	{
@@ -301,7 +301,7 @@ int main(int argc, char** argv)
 		X_test.pb(s);		
 	}
 	
-	freopen("train_test_dis_array.txt","w",stdout);
+	freopen("train_test_dis_array_scaled.txt","w",stdout);
 	
 	for(int i = 0; i<red_num;i++)
 	{

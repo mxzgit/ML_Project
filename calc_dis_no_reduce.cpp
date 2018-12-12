@@ -245,7 +245,7 @@ int main(int argc, char** argv)
 		for (int j=0; j<8 ; j++)
 			dis[i][j] = double(min(abs(i - j), min(i, j) + 8 - max(i, j))) * 0.5;
 		
-	freopen("data/train_code.txt","r",stdin);
+	freopen("data/train_code_scaled.txt","r",stdin);
 	
 	string s;
 	vector<string> X_train,X_test;
@@ -260,7 +260,7 @@ int main(int argc, char** argv)
 		
 	cout<<"size X_train "<<X_train.size()<<endl;
 		
-	freopen("data/test_code.txt","r",stdin);
+	freopen("data/test_code_scaled.txt","r",stdin);
 	
 	for(int i=0; i < test_sz ; i++)
 	{
@@ -272,7 +272,7 @@ int main(int argc, char** argv)
 	
 	cout<<"size X_test "<<X_test.size()<<endl;
 	
-	freopen("train_test_dis_array_no_reduce.txt","w",stdout);
+	freopen("train_test_dis_array_scaled_no_reduce.txt","w",stdout);
 	
 	for(int i = 0; i<MAX_NUM;i++)
 	{
