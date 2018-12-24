@@ -5,6 +5,27 @@ import cv2
 import pickle
 import numpy as np
 import sys
+
+from cv2 import imread
+import numpy as np
+from matplotlib import pylab as pt
+
+def filter_mean(img, bloc_size):
+
+    newimg = np.zeros(shape=(img.shape[0], img.shape[1]))
+    border = int(bloc_size/2)
+    members = [(0, 0)]*((1+border*2)**2)
+    for i in range(border, img.shape[0]-border):
+        k = 0
+        for j in range(border, img.shape[1]-border):
+            for k in range((1+border*2)**2):
+
+                members[k] = img[
+                    (i-border+int(k/bloc_size), j-border+int(k % bloc_size))]
+
+            newimg[i, j] = np.int_(np.median(members, axis=0))
+    return newimg
+
 x_d = 14
 y_d = 14
 #s
@@ -166,12 +187,13 @@ if __name__ == "__main__":
 			im_gray = array(images[i])
 			im_gray = im_gray.reshape([28, 28])
 			im_gray = im_gray.astype(uint8)
+			im_gray = filter_mean(im_gray,5)
 			#cv2.imshow("Show by CV2 first image",im_gray)
 			#print('shap: ',im_gray.shape)
-			height, width = im_gray.shape
-			imgScale = .5
-			newX,newY = im_gray.shape[1]*imgScale, im_gray.shape[0]*imgScale
-			im_gray = cv2.resize(im_gray,(int(newX),int(newY)))
+			#height, width = im_gray.shape
+			#imgScale = .5
+			#newX,newY = im_gray.shape[1]*imgScale, im_gray.shape[0]*imgScale
+			#im_gray = cv2.resize(im_gray,(int(newX),int(newY)))
 			#cv2.imshow("Show by CV2 second image",im_gray)
 			#cv2.waitKey(0)
 			#cv2.imwrite("resizeimg.jpg",im_gray)
@@ -190,10 +212,10 @@ if __name__ == "__main__":
 				print(i)
 
 		if coco == 0:
-			with open('test_code_scaled_half.data', 'wb') as fp1:
+			with open('test_code_filtered.data', 'wb') as fp1:
 				pickle.dump(itemlist, fp1)
 		else:
-			with open('train_code_scaled_half.data', 'wb') as fp1:
+			with open('train_code_filtered.data', 'wb') as fp1:
 				pickle.dump(itemlist, fp1)
 
 	
