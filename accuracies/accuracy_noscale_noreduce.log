@@ -1,0 +1,21 @@
+no scale no reduce:
+k=1, accuracy=0.9536%
+k=2, accuracy=0.9513%
+k=3, accuracy=0.9579%
+k=4, accuracy=0.9588%
+k=5, accuracy=0.9598%
+k=6, accuracy=0.9593%
+k=7, accuracy=0.9603%
+k=8, accuracy=0.9587%
+k=9, accuracy=0.9593%
+k=10, accuracy=0.958%
+k=11, accuracy=0.9572%
+k=12, accuracy=0.9575%
+k=13, accuracy=0.9568%
+k=14, accuracy=0.9567%
+k=15, accuracy=0.9567%
+k=16, accuracy=0.957%
+k=17, accuracy=0.9565%
+k=18, accuracy=0.9557%
+k=19, accuracy=0.9553%
+k=20, accuracy=0.9553%
