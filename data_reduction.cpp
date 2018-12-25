@@ -245,7 +245,7 @@ int main(int argc, char** argv)
 		for (int j=0; j<8 ; j++)
 			dis[i][j] = double(min(abs(i - j), min(i, j) + 8 - max(i, j))) * 0.5;
 		
-	freopen("data/train_code_scaled.txt","r",stdin);
+	freopen("data/train_code_filtered.txt","r",stdin);
 	
 	string s;
 	vector<string> X;
@@ -259,7 +259,7 @@ int main(int argc, char** argv)
 		X.pb(s);
 	}	
 	cout<<"size X "<<X.size()<<endl;
-    freopen("data/train_labels_scaled.txt","r",stdin);
+    freopen("data/train_labels.txt","r",stdin);
 	for(int i=0;i<MAX_NUM;i++)
 	{
 		int tmp;
@@ -275,7 +275,7 @@ int main(int argc, char** argv)
 	ind = condensedNN(X, y, ind);
     cout<<"done condensedNN. Ind size: "<<ind.size()<<"\n";
 	cout.flush();
-	freopen("reduced_train_indexes.txt","w",stdout);
+	freopen("reduced_train_indexes_filtered.txt","w",stdout);
     for(int i = 0;i < ind.size(); i++)
 		cout<<ind[i]<<endl;
 	cout.flush();
