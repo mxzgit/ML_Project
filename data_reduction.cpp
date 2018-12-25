@@ -275,7 +275,7 @@ int main(int argc, char** argv)
 	ind = condensedNN(X, y, ind);
     cout<<"done condensedNN. Ind size: "<<ind.size()<<"\n";
 	cout.flush();
-	freopen("reduced_train_indexes_filtered.txt","w",stdout);
+	freopen("reduced_train_filtered_indexes.txt","w",stdout);
     for(int i = 0;i < ind.size(); i++)
 		cout<<ind[i]<<endl;
 	cout.flush();
