@@ -187,7 +187,7 @@ if __name__ == "__main__":
 			im_gray = array(images[i])
 			im_gray = im_gray.reshape([28, 28])
 			im_gray = im_gray.astype(uint8)
-			im_gray = filter_mean(im_gray,3)
+			#im_gray = filter_mean(im_gray,2)
 			#cv2.imshow("Show by CV2 first image",im_gray)
 			#print('shap: ',im_gray.shape)
 			#height, width = im_gray.shape
