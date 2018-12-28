@@ -72,7 +72,7 @@ double dp_rolling_ed(string s1,string s2)
 
 int main(int argc, char** argv)
 {
-	
+	fastio;
 	string s_test = string(argv[1]);
 	for (int j=0;j<s_test.size();j++)
 		s_test[j] = int(s_test[j]) - int('0');
