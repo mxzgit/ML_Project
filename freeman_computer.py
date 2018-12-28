@@ -1,5 +1,5 @@
 import os
-from matplotlib import pylab as pt
+#from matplotlib import pylab as pt
 from numpy import array, uint8
 import cv2
 import pickle
@@ -8,7 +8,7 @@ import sys
 
 from cv2 import imread
 import numpy as np
-from matplotlib import pylab as pt
+#from matplotlib import pylab as pt
 
 def filter_mean(img, bloc_size):
 

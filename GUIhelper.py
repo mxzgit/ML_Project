@@ -1,8 +1,8 @@
 import numpy as np
 import cv2
 from freeman_computer import *
-from dp_rolling import dp_rolling_ed
 
+import os
 
 def bmp2freeman(bmppath):
 	im_gray = cv2.imread(bmppath, 0)
@@ -20,7 +20,14 @@ X_train = np.genfromtxt('data/reduced_train.txt', dtype=str)
 y_train = np.genfromtxt('data/reduced_train_label.txt', dtype='uint8')
 
 def predict(code, k=7):
-	dist = np.array([dp_rolling_ed(c, code) for c in X_train])
+	command = './coco ' + str(code).replace(' ','').replace('[','').replace(']','').replace(',','')
+	#print(os.system(command))
+	os.system(command)
+	text_file = open("distance_res.txt", "r")
+	lines = text_file.read().split(' ')
+	dist = np.array([float(c) for c in lines])
+	#print(str(dist))
+	#print('size ' + str(len(dist)))
 	sortedind = dist.argsort(axis=0)
 	knearest = sortedind[:k]
 	y_pred = np.bincount(y_train[knearest]).argmax()
