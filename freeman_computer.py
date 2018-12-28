@@ -54,6 +54,8 @@ def check_point_inside(point):
 
 def freeman_calc(img):
 
+	#cv2.imwrite("input.jpg",img)
+	#print(img)
 	vis = array( [False] * (x_d*y_d) )
 	vis = vis.reshape([x_d, y_d])
 
@@ -79,6 +81,7 @@ def freeman_calc(img):
 	border = []
 	chain = []
 	curr_point = start_point
+	vis[curr_point] = True
 	for direction in directions:
 		idx = dir2idx[direction]
 		new_point = (start_point[0]+change_i[idx], start_point[1]+change_j[idx])
@@ -94,6 +97,7 @@ def freeman_calc(img):
 	count = 0
 	while curr_point != start_point:
 		#figure direction to start search
+		#print(curr_point)
 		b_direction = (direction + 5) % 8 
 		dirs_1 = range(b_direction, 8)
 		dirs_2 = range(0, b_direction)
@@ -120,6 +124,8 @@ def freeman_calc(img):
 				img[i,j] = 255
 			else:
 				img[i,j] = 0
+	#cv2.imwrite("code.jpg",img)
+	
 	return img, chain
 
 def dfs_count(img,x,y):
