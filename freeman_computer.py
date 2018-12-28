@@ -26,8 +26,8 @@ def filter_mean(img, bloc_size):
             newimg[i, j] = np.int_(np.median(members, axis=0))
     return newimg
 
-x_d = 14
-y_d = 14
+x_d = 28
+y_d = 28
 #s
 vis = array( [False] * (x_d*y_d) )
 vis = vis.reshape([x_d, y_d])

@@ -3,7 +3,7 @@
 # dynamic programming rolling approach for edit
 #
 
-_MAX = 61
+_MAX = 300
 _OO = (1 << 60)
 import sys
 dis = [[0 for _ in range(8)] for _ in range(8)]

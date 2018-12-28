@@ -242,10 +242,12 @@ int main(int argc, char** argv)
 	
 	cout<<"start\n";
 	cout.flush();
-	for (int i=0; i<8 ; i++)
+	for (int i=0; i<8 ; i++){
 		for (int j=0; j<8 ; j++)
-			dis[i][j] = double(min(abs(i - j), min(i, j) + 8 - max(i, j))) * 0.5;
-		
+			cout<<' '<< (dis[i][j] = double(min(abs(i - j), min(i, j) + 8 - max(i, j))) * 0.5);
+		cout<<'\n';
+	}
+	exit(1);
 	freopen("data/train_code_filtered.txt","r",stdin);
 	
 	string s;
