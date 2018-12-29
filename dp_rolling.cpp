@@ -102,6 +102,6 @@ int main(int argc, char** argv)
 		if(i)
 			cout<<' ';
 		float d = dp_rolling_ed(s_test,X_train_reduced[i]);
-		printf("%.6f", d);
+		cout<<d;
 	}
 }
