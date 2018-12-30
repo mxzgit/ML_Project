@@ -20,8 +20,8 @@ typedef vector< vpi> vvpi;
 #define valid(i, t) (0 <= (i) && (i) < (t))
 #define OO 0x7fffffff
 #define MOD 1000000007
-#define MAX_NUM 60000
-#define MAX_LEN 200
+#define MAX_NUM 63497
+#define MAX_LEN 300
 #define OF 
 ll gcd(ll a, ll b) {return b == 0 ? a : gcd(b, a % b);}
 ll lcm(ll a, ll b) {return a * (b / gcd(a, b));}
@@ -245,7 +245,7 @@ int main(int argc, char** argv)
 		for (int j=0; j<8 ; j++)
 			dis[i][j] = double(min(abs(i - j), min(i, j) + 8 - max(i, j))) * 0.5;
 		
-	freopen("data/train_code_filtered.txt","r",stdin);
+	freopen("data/train_code_with_GANs.txt","r",stdin);
 	
 	string s;
 	vector<string> X;
@@ -259,7 +259,7 @@ int main(int argc, char** argv)
 		X.pb(s);
 	}	
 	cout<<"size X "<<X.size()<<endl;
-    freopen("data/train_labels.txt","r",stdin);
+    freopen("data/train_labels_with_GANs.txt","r",stdin);
 	for(int i=0;i<MAX_NUM;i++)
 	{
 		int tmp;
@@ -275,7 +275,7 @@ int main(int argc, char** argv)
 	ind = condensedNN(X, y, ind);
     cout<<"done condensedNN. Ind size: "<<ind.size()<<"\n";
 	cout.flush();
-	freopen("reduced_train_filtered_indexes.txt","w",stdout);
+	freopen("reduced_train_GANs_indexes.txt","w",stdout);
     for(int i = 0;i < ind.size(); i++)
 		cout<<ind[i]<<endl;
 	cout.flush();

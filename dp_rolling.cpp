@@ -20,14 +20,10 @@ typedef vector< vpi> vvpi;
 #define OO 0x7fffffff
 #define MOD 1000000007
 #define MAX_NUM 60000
-#define MAX_LEN 200
+#define MAX_LEN 300
 #define OF 
 ll gcd(ll a, ll b) {return b == 0 ? a : gcd(b, a % b);}
 ll lcm(ll a, ll b) {return a * (b / gcd(a, b));}
-
-#define mph(i,j) ( ll(i)*MAX_NUM + j )
-
-unordered_map<ll,double> dists;
 
 bool del[MAX_NUM];
 bool in_storage[MAX_NUM];
@@ -76,9 +72,11 @@ double dp_rolling_ed(string s1,string s2)
 
 int main(int argc, char** argv)
 {
-	
+	fastio;
 	string s_test = string(argv[1]);
-	const int red_num =2661 ;
+	for (int j=0;j<s_test.size();j++)
+		s_test[j] = int(s_test[j]) - int('0');
+	const int red_num = 2661 ;
 	
 	for (int i=0; i<8 ; i++)
 		for (int j=0; j<8 ; j++)
@@ -92,25 +90,18 @@ int main(int argc, char** argv)
 	for(int i=0;i<red_num;i++)
 	{
 		cin>>s;
+		//cout<<s<<endl;
 		//X_train_print.pb(s);
 		for (int j=0;j<s.size();j++)
 			s[j] = int(s[j]) - int('0');
 		X_train_reduced.pb(s);
 	}
-	freopen("data/reduced_train_label.txt","r",stdin);
-	for(int i=0;i<red_num;i++)
-	{
-		cin>>x;
-		Y_train_reduced.pb(x);
-	}
-	
-	//cout<<X_train_reduced.size()<<' '<<Y_train_reduced.size()<<endl;
 	
 	freopen("distance_res.txt","w",stdout);
-	
 	for(int i = 0; i<red_num;i++){
 		if(i)
 			cout<<' ';
-		cout<<dp_rolling_ed(s_test,X_train_reduced[i]);
+		float d = dp_rolling_ed(s_test,X_train_reduced[i]);
+		cout<<d;
 	}
 }

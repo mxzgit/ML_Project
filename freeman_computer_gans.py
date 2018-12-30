@@ -167,61 +167,77 @@ def inflate_component(img_bw):
 	return temp_img
 
 if __name__ == "__main__":
+
+	dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),"data/pics")
+	c = 0
+	if not os.path.exists(dir_path):
+		print("error reading the directory")
+		exit(1)
+	codes = []
+	labels = []
+	for subdir, dirs, files in os.walk(dir_path):
+		for file in files:
+			filepath = subdir + os.sep + file
+			#if 'fixed' in filepath:
+			#	continue
+
+			if filepath.endswith(".png") or filepath.endswith(".PNG"):
+				im_gray = cv2.imread(filepath,0)
+				y,x = 15,40
+				w = 75
+				im_gray = im_gray[y:y+w, x:x+w]
+				#cv2.imwrite(str(c)+".jpg",im_gray)
+				im_gray = im_gray.astype(uint8)
+				im_gray = cv2.resize(im_gray,(int(28),int(28)))
+				(thresh, im_bw) = cv2.threshold(im_gray, 30, 255, cv2.THRESH_BINARY)
+				#print(im_bw[0])
+				while count_component(im_bw) > 1:
+					im_bw = inflate_component(im_bw)
+				
+				code = []
+				
+				#cv2.imwrite("shit.jpg",im_bw)
+				#exit(1)
+				code_bw, code = freeman_calc(im_bw)
+				codes.append(code)
+				if 'zero' in filepath:
+					labels.append(0)
+				elif 'one' in filepath:
+					labels.append(1)
+				elif 'two' in filepath:
+					labels.append(2)
+				elif 'three' in filepath:
+					labels.append(3)
+				elif 'four' in filepath:
+					labels.append(4)
+				elif 'five' in filepath:
+					labels.append(5)
+				elif 'six' in filepath:
+					labels.append(6)
+				elif 'seven' in filepath:
+					labels.append(7)
+				elif 'eight' in filepath:
+					labels.append(8)
+				elif 'nine' in filepath:
+					labels.append(9)
+				else:
+					labels.append(-1)
+					exit(1)
+				#print(code)
+				c += 1
+				if c%10 == 0 :
+					#print(code)
+					print(c)
+					sys.stdout.flush()
 	
-	test_images = pickle.load(open( os.path.join("data","test_images.data"), "rb"))
-	test_images = np.array(test_images)
+	print(len(codes),len(labels))
 
-	train_images = pickle.load(open(os.path.join("data","train_images.data"), "rb"))
-	train_images = np.array(train_images)
+	with open('GANs_code.data', 'wb') as fp1:
+		pickle.dump(codes, fp1)
 
-	print(train_images.shape)
-	print(test_images.shape)
-	sys.stdout.flush()
-	
-	for coco in range(2):
-		itemlist = []
-		if coco == 0:
-			images = test_images
-		else:
-			images = train_images
-		print("read done")
-		number_images = int(len(images))
-		print(number_images)
-		for i in range(number_images):
-			
-			#print (i)
-			im_gray = array(images[i])
-			im_gray = im_gray.reshape([28, 28])
-			im_gray = im_gray.astype(uint8)
-			#im_gray = filter_mean(im_gray,2)
-			#cv2.imshow("Show by CV2 first image",im_gray)
-			#print('shap: ',im_gray.shape)
-			#height, width = im_gray.shape
-			#imgScale = .5
-			#newX,newY = im_gray.shape[1]*imgScale, im_gray.shape[0]*imgScale
-			#im_gray = cv2.resize(im_gray,(int(newX),int(newY)))
-			#cv2.imshow("Show by CV2 second image",im_gray)
-			#cv2.waitKey(0)
-			#cv2.imwrite("resizeimg.jpg",im_gray)
-			#exit(1)
-			#print('shap: ',im_gray.shape)
-			(thresh, im_bw) = cv2.threshold(im_gray, 30, 255, cv2.THRESH_BINARY)
-
-			while count_component(im_bw) > 1:
-				im_bw = inflate_component(im_bw)
-			
-			code = []
-			code_bw, code = freeman_calc(im_bw)
-			
-			itemlist.append(code)
-			if i % 100 == 0:
-				print(i)
-
-		if coco == 0:
-			with open('test_code_filtered.data', 'wb') as fp1:
-				pickle.dump(itemlist, fp1)
-		else:
-			with open('train_code_filtered.data', 'wb') as fp1:
-				pickle.dump(itemlist, fp1)
-
-	
+	with open('GANs_labels.data', 'wb') as fp1:
+		pickle.dump(labels, fp1)
+				
+				
+				
+				

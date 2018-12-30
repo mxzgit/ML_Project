@@ -9,14 +9,14 @@ import sys
 if __name__ == "__main__":
 	
 	
-	y = pickle.load(open("data/test_code_filtered.data", "rb"))
+	y = pickle.load(open("data/GANs_code.data", "rb"))
 	#y = np.array(y)
 	
 	#for x in X:
 	#    for i in x:
 	#        print(i,end='')
 	#    print()
-	f = open('test_code_filtered.txt','w')
+	f = open('GANs_code.txt','w')
 	for x in y:
 		for i in x:
 			f.write(str(i))

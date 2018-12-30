@@ -19,8 +19,8 @@ typedef vector< vpi> vvpi;
 #define valid(i, t) (0 <= (i) && (i) < (t))
 #define OO 0x7fffffff
 #define MOD 1000000007
-#define MAX_NUM 60000
-#define MAX_LEN 200
+#define MAX_NUM 63497
+#define MAX_LEN 300
 #define OF 
 ll gcd(ll a, ll b) {return b == 0 ? a : gcd(b, a % b);}
 ll lcm(ll a, ll b) {return a * (b / gcd(a, b));}
@@ -237,7 +237,7 @@ vi condensedNN(vector<string> X,vi y,vi ind)
 
 int main(int argc, char** argv)
 {
-	const int red_num =4031 ;
+	const int red_num = ;
 	const int test_sz = 10000;
 	
 	cout<<"start\n";
@@ -247,8 +247,8 @@ int main(int argc, char** argv)
 			cout<<' '<< (dis[i][j] = double(min(abs(i - j), min(i, j) + 8 - max(i, j))) * 0.5);
 		cout<<'\n';
 	}
-	exit(1);
-	freopen("data/train_code_filtered.txt","r",stdin);
+	//exit(1);
+	freopen("data/train_code_with_GANs.txt","r",stdin);
 	
 	string s;
 	vector<string> X_train,X_train_reduced,X_test,X_train_print;
@@ -263,7 +263,7 @@ int main(int argc, char** argv)
 		X_train.pb(s);
 	}
 		
-	freopen("data/train_labels.txt","r",stdin);
+	freopen("data/train_labels_with_GANs.txt","r",stdin);
 	for(int i=0;i<MAX_NUM;i++)
 	{
 		int z ;
@@ -273,8 +273,8 @@ int main(int argc, char** argv)
 	
 	cout<<"size X "<<X_train.size()<<endl;
 	
-	freopen("data/reduced_train_filtered_indexes.txt","r",stdin);
-	freopen("reduced_train_filtered.txt","w",stdout);
+	freopen("data/reduced_train_GANs_indexes.txt","r",stdin);
+	freopen("reduced_train_GANs.txt","w",stdout);
 	int x;
 	for(int i = 0; i < red_num ; i++)
 	{
@@ -283,8 +283,8 @@ int main(int argc, char** argv)
 		X_train_reduced.pb(X_train[x]);
 	}
 	
-	freopen("data/reduced_train_filtered_indexes.txt","r",stdin);
-	freopen("reduced_train_label_filtered.txt","w",stdout);
+	freopen("data/reduced_train_GANs_indexes.txt","r",stdin);
+	freopen("reduced_train_label_GANs.txt","w",stdout);
 	
 	for(int i = 0; i < red_num ; i++)
 	{
@@ -303,7 +303,7 @@ int main(int argc, char** argv)
 		X_test.pb(s);		
 	}
 	
-	freopen("train_test_dis_array_filtered.txt","w",stdout);
+	freopen("train_test_dis_array_GANs.txt","w",stdout);
 	
 	for(int i = 0; i<red_num;i++)
 	{
