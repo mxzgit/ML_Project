@@ -37,6 +37,12 @@ class Paint(object):
         self.c = Canvas(self.root, bg='white', width=300, height=300)
         self.c.grid(row=1, columnspan=5)
 
+        self.label = Label(self.root, text='prediction: ', font=("Helvetica", 14))
+        self.label.grid(row=2, column=1)
+        self.prediction = StringVar()
+        self.predLabel = Label(self.root, font=("Helvetica", 14), textvariable=self.prediction)
+        self.predLabel.grid(row=2, column=2)
+
         self.setup()
         self.root.mainloop()
 
@@ -98,8 +104,7 @@ class Paint(object):
         img.thumbnail((28, 28), Image.ANTIALIAS)
         img.save(bmppath, 'bmp')
         freeman_code = bmp2freeman(bmppath)
-        print(freeman_code) 
-        print(predict(freeman_code))
+        self.prediction.set(str(predict(freeman_code)))
 
 if __name__ == '__main__':
     Paint()
