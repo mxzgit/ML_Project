@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 	string s_test = string(argv[1]);
 	for (int j=0;j<s_test.size();j++)
 		s_test[j] = int(s_test[j]) - int('0');
-	const int red_num =2661 ;
+	const int red_num = 2661 ;
 	
 	for (int i=0; i<8 ; i++)
 		for (int j=0; j<8 ; j++)
