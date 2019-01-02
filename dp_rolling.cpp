@@ -8,7 +8,6 @@ typedef vector< vi> vvi;
 typedef pair<int, int> pi;
 typedef vector<pi > vpi;
 typedef vector< vpi> vvpi;
-
 #define mp  make_pair
 #define pb  push_back
 #define eps (1e-9)
@@ -24,21 +23,15 @@ typedef vector< vpi> vvpi;
 #define OF 
 ll gcd(ll a, ll b) {return b == 0 ? a : gcd(b, a % b);}
 ll lcm(ll a, ll b) {return a * (b / gcd(a, b));}
+inline float min3(float x,float y,float z){return min(x,min(y,z));}
 
 bool del[MAX_NUM];
 bool in_storage[MAX_NUM];
-
-double _DP_ROLL[2][MAX_LEN];
-
-double dis[8][8];
-	
-inline double min3(double x,double y,double z)
-{
-	return min(x,min(y,z));
-}	
+float _DP_ROLL[2][MAX_LEN];
+float dis[8][8];
 int total_dp_call = 0;
-
-double dp_rolling_ed(string s1,string s2)
+	
+float dp_rolling_ed(string s1,string s2)
 {
 	if(++total_dp_call % 1000000 == 0){
 		cerr<<"DP: "<<total_dp_call<<endl;
@@ -46,13 +39,13 @@ double dp_rolling_ed(string s1,string s2)
 	}
 	int sz1 = s1.size();
 	int sz2 = s2.size();
-	double cost = 0;
+	float cost = 0;
 	for (int i=0;i<=sz2;i++)
-		_DP_ROLL[0][i] = double(i);
+		_DP_ROLL[0][i] = float(i);
 	
 	for (int i=1 ; i<=sz1 ; i++)
 	{
-		_DP_ROLL[i % 2][0] = double(i);
+		_DP_ROLL[i % 2][0] = float(i);
 		for (int j = 1 ; j <= sz2 ; j++)
 		{
 			if(s1[i - 1] == s2[j - 1])
@@ -73,16 +66,16 @@ double dp_rolling_ed(string s1,string s2)
 int main(int argc, char** argv)
 {
 	fastio;
+	const int red_num = 2661 ;
+	for (int i=0; i<8 ; i++)
+		for (int j=0; j<8 ; j++)
+			dis[i][j] = float(min(abs(i - j), min(i, j) + 8 - max(i, j))) * 0.5;
+	
 	string s_test = string(argv[1]);
 	for (int j=0;j<s_test.size();j++)
 		s_test[j] = int(s_test[j]) - int('0');
-	const int red_num = 2661 ;
 	
-	for (int i=0; i<8 ; i++)
-		for (int j=0; j<8 ; j++)
-			dis[i][j] = double(min(abs(i - j), min(i, j) + 8 - max(i, j))) * 0.5;
-	
-	string s; int x;
+	string s;
 	vector<string> X_train_reduced;
 	vi Y_train_reduced;
 	
@@ -90,8 +83,6 @@ int main(int argc, char** argv)
 	for(int i=0;i<red_num;i++)
 	{
 		cin>>s;
-		//cout<<s<<endl;
-		//X_train_print.pb(s);
 		for (int j=0;j<s.size();j++)
 			s[j] = int(s[j]) - int('0');
 		X_train_reduced.pb(s);

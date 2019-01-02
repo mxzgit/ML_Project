@@ -8,9 +8,7 @@ typedef vector< vi> vvi;
 typedef pair<int, int> pi;
 typedef vector<pi > vpi;
 typedef vector< vpi> vvpi;
-
 #define mp  make_pair
-
 #define pb  push_back
 #define eps (1e-9)
 #define iseq(a,b) (fabs(a-b)<eps)
@@ -25,25 +23,18 @@ typedef vector< vpi> vvpi;
 #define OF 
 ll gcd(ll a, ll b) {return b == 0 ? a : gcd(b, a % b);}
 ll lcm(ll a, ll b) {return a * (b / gcd(a, b));}
-
+inline float min3(float x,float y,float z){return min(x,min(y,z));}	
+// hash function for the pairs of int
 #define mph(i,j) ( ll(i)*MAX_NUM + j )
 
-unordered_map<ll,double> dists;
-
+unordered_map<ll,float> dists;
 bool del[MAX_NUM];
 bool in_storage[MAX_NUM];
-
-double _DP_ROLL[2][MAX_LEN];
-
-double dis[8][8];
-	
-inline double min3(double x,double y,double z)
-{
-	return min(x,min(y,z));
-}	
+float _DP_ROLL[2][MAX_LEN];
+float dis[8][8];
 int total_dp_call = 0;
 
-double dp_rolling_ed(string s1,string s2)
+float dp_rolling_ed(string s1,string s2)
 {
 	if(++total_dp_call % 1000000 == 0){
 		cerr<<"DP: "<<total_dp_call<<endl;
@@ -51,13 +42,13 @@ double dp_rolling_ed(string s1,string s2)
 	}
 	int sz1 = s1.size();
 	int sz2 = s2.size();
-	double cost = 0;
+	float cost = 0;
 	for (int i=0;i<=sz2;i++)
-		_DP_ROLL[0][i] = double(i);
+		_DP_ROLL[0][i] = float(i);
 	
 	for (int i=1 ; i<=sz1 ; i++)
 	{
-		_DP_ROLL[i % 2][0] = double(i);
+		_DP_ROLL[i % 2][0] = float(i);
 		for (int j = 1 ; j <= sz2 ; j++)
 		{
 			if(s1[i - 1] == s2[j - 1])
@@ -102,14 +93,14 @@ vi bayesianReduction(vector<string> X,vi y)
 		{
 			int i = S1[ii];
             int predindex = -1;
-            double mindist = OO;
+            float mindist = OO;
             
             for (int jj=0; jj < S2.size() ; jj++)
 			{
 				int j = S2[jj];
-				unordered_map<ll,double>::iterator it = dists.find(mph(i,j));
+				unordered_map<ll,float>::iterator it = dists.find(mph(i,j));
                 if (it == dists.end()){
-                    double ij_dis = dp_rolling_ed(X[i], X[j]);
+                    float ij_dis = dp_rolling_ed(X[i], X[j]);
 					dists.insert(mp(mph(i,j),ij_dis));
 					it = dists.insert(mp(mph(j,i),ij_dis)).first;
 				}
@@ -126,22 +117,22 @@ vi bayesianReduction(vector<string> X,vi y)
         }
 		
 		if(rounds == 1){
-			cout<<"half first round is done!\n";
-			cout.flush();
+			cerr<<"half first round is done!\n";
+			cerr.flush();
 		}
         
         for (int jj=0; jj < S2.size();jj++)
 		{
 			int j = S2[jj];
             int predindex = -1;
-            double mindist = (1 << 30);
+            float mindist = (1 << 30);
             
             for (int ii=0; ii < S1.size();ii++)
 			{
 				int i = S1[ii];
-				unordered_map<ll,double>::iterator it = dists.find(mph(i,j));
+				unordered_map<ll,float>::iterator it = dists.find(mph(i,j));
                 if (it == dists.end()){
-                    double ij_dis = dp_rolling_ed(X[i], X[j]);
+                    float ij_dis = dp_rolling_ed(X[i], X[j]);
 					dists.insert(mp(mph(i,j),ij_dis));
 					it = dists.insert(mp(mph(j,i),ij_dis)).first;
 				}
@@ -158,8 +149,8 @@ vi bayesianReduction(vector<string> X,vi y)
         }
 		
 		if(rounds == 1){
-			cout<<"first round is done!\n";
-			cout.flush();
+			cerr<<"first round is done!\n";
+			cerr.flush();
 		}
 		
 	}
@@ -170,10 +161,11 @@ vi bayesianReduction(vector<string> X,vi y)
 	for (int i=0;i<S2.size();i++)
 			ret_ind.pb(S2[i]);
 	sort(ret_ind.begin(),ret_ind.end());
-	cout<<"ret_ind: "<<ret_ind.size()<<endl;
+	cerr<<"ret_ind: "<<ret_ind.size()<<endl;
 	return ret_ind;
 }
 
+// pop function for the sparse sets
 void swap_pop(vi& vec,int idx)
 {
 	int sz = vec.size();
@@ -202,13 +194,13 @@ vi condensedNN(vector<string> X,vi y,vi ind)
             if( !in_storage[i])
 			{
                 int predindex = -1;
-                double mindist = (1<<30);
+                float mindist = (1<<30);
                 for (int jj = 0; jj< storage.size(); jj++)
 				{
 					int j = storage[jj];
-					unordered_map<ll,double>::iterator it = dists.find(mph(i,j));
+					unordered_map<ll,float>::iterator it = dists.find(mph(i,j));
 					if (it == dists.end()){
-						double ij_dis = dp_rolling_ed(X[i], X[j]);
+						float ij_dis = dp_rolling_ed(X[i], X[j]);
 						dists.insert(mp(mph(i,j),ij_dis));
 						it = dists.insert(mp(mph(j,i),ij_dis)).first;
 					}
@@ -226,7 +218,7 @@ vi condensedNN(vector<string> X,vi y,vi ind)
 				}
 			}
 			else{
-				cout<<"This should never be executed!\n";
+				cerr<<"This should never be executed!\n";
 				exit(1);
 			}
 		}
@@ -238,12 +230,13 @@ vi condensedNN(vector<string> X,vi y,vi ind)
 
 int main(int argc, char** argv)
 {
+	cerr<<"start\n";
+	cerr.flush();
 	srand(time(0));
-	cout<<"start\n";
-	cout.flush();
+	fastio;
 	for (int i=0; i<8 ; i++)
 		for (int j=0; j<8 ; j++)
-			dis[i][j] = double(min(abs(i - j), min(i, j) + 8 - max(i, j))) * 0.5;
+			dis[i][j] = float(min(abs(i - j), min(i, j) + 8 - max(i, j))) * 0.5;
 		
 	freopen("data/train_code_with_GANs.txt","r",stdin);
 	
@@ -258,7 +251,7 @@ int main(int argc, char** argv)
 			s[j] = int(s[j]) - int('0');
 		X.pb(s);
 	}	
-	cout<<"size X "<<X.size()<<endl;
+	cerr<<"size X "<<X.size()<<endl;
     freopen("data/train_labels_with_GANs.txt","r",stdin);
 	for(int i=0;i<MAX_NUM;i++)
 	{
@@ -266,15 +259,15 @@ int main(int argc, char** argv)
 		cin>>tmp;
 		y.pb(tmp);
 	}
-	cout<<"size y "<<y.size()<<endl;
-	cout<<"done reading\n";
-	cout.flush();
+	cerr<<"size y "<<y.size()<<endl;
+	cerr<<"done reading\n";
+	cerr.flush();
     vi ind = bayesianReduction(X, y);
-    cout<<"done bayesianReduction\n";
-	cout.flush();
+    cerr<<"done bayesianReduction\n";
+	cerr.flush();
 	ind = condensedNN(X, y, ind);
-    cout<<"done condensedNN. Ind size: "<<ind.size()<<"\n";
-	cout.flush();
+    cerr<<"done condensedNN. Ind size: "<<ind.size()<<"\n";
+	cerr.flush();
 	freopen("reduced_train_GANs_indexes.txt","w",stdout);
     for(int i = 0;i < ind.size(); i++)
 		cout<<ind[i]<<endl;
