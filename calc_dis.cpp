@@ -230,10 +230,11 @@ vi condensedNN(vector<string> X,vi y,vi ind)
 
 int main(int argc, char** argv)
 {
+//	fastio;
 	cerr<<"start\n";
 	cerr.flush();
-	fastio;
-	const int red_num = ;
+
+	const int red_num = 2813;
 	const int test_sz = 10000;
 	
 	for (int i=0; i<8 ; i++)
