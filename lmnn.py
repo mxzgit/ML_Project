@@ -22,5 +22,6 @@ X_train_transformed = lmnn.transform(X_train)
 
 pickle.dump(X_train_transformed, open("data/numerical_train_transformed.pkl", 'wb'))
 pickle.dump(y_train, open("data/numerical_train_labels.pkl", 'wb'))
+pickle.dump(lmnn, open("data/lmnn.pkl", 'wb'))
 
 print('done!')
