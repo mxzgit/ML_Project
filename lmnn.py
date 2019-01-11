@@ -9,7 +9,7 @@ n, d = csv.shape
 X_train = csv[:,:d-1]
 y_train = csv[:,-1]
 
-k_train, n_components, max_iter = 7, d, 180
+k_train, n_components, max_iter = 7, d-1, 180
 
 lmnn = LMNN(n_neighbors=k_train, max_iter=max_iter, n_components=n_components)
 
