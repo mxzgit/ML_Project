@@ -1,0 +1,21 @@
+GAN No Reduce:
+k=1, accuracy=0.9556%
+k=2, accuracy=0.953%
+k=3, accuracy=0.958%
+k=4, accuracy=0.9591%
+k=5, accuracy=0.9591%
+k=6, accuracy=0.9586%
+k=7, accuracy=0.9596%
+k=8, accuracy=0.9588%
+k=9, accuracy=0.9584%
+k=10, accuracy=0.958%
+k=11, accuracy=0.9577%
+k=12, accuracy=0.9563%
+k=13, accuracy=0.956%
+k=14, accuracy=0.9554%
+k=15, accuracy=0.9559%
+k=16, accuracy=0.9557%
+k=17, accuracy=0.9555%
+k=18, accuracy=0.9557%
+k=19, accuracy=0.955%
+k=20, accuracy=0.955%
