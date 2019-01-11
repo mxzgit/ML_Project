@@ -906,7 +906,7 @@ half first round is done!
 first round is done!
 ret_ind: 60000
 done bayesianReduction
-done condensedNN. Ind size: 1
+done condensedNN. Ind size: 4031
 
 real	148m12.042s
 user	122m25.828s
